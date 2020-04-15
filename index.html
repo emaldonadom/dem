@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>DEM</title>
+        <style>
+            body { margin: 0; }
+            canvas { display: block; }
+        </style>
+    </head>
+    <body>
+        <script src="js/three.js"></script>
+        <script>
+            var scene = new THREE.Scene();
+            var camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.1, 1000 );
+            var geometry = new THREE.BoxGeometry();
+            var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+            var cube = new THREE.Mesh( geometry, material );
+            var cube2 = new THREE.Mesh( geometry, material );
+            var renderer = new THREE.WebGLRenderer({antialias: true});
+
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            document.body.appendChild( renderer.domElement );
+            scene.add( cube );
+            scene.add( cube2 );
+            camera.position.z = 5;
+
+            function animate() {
+                requestAnimationFrame( animate );
+                renderer.render( scene, camera );
+
+                cube.rotation.x += 0.023;  
+                cube2.rotation.x += 0.023;  
+            }
+            animate();
+        </script>
+    </body>
+</html>
