@@ -10,49 +10,67 @@
     </head>
     <body>
         <script src="js/three.js"></script>
+<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+
+
         <script>
             var scene = new THREE.Scene();
-            var camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 0.1, 1000 );
+            var camera = new THREE.PerspectiveCamera( 55, window.innerWidth / window.innerHeight, 0.1, 1000 );
             const material = new THREE.MeshStandardMaterial({
-                color: 0xDFDFDF,
-                emissive: 0x525252,
-                specular: 0xffffff,
-                metalness: 2,
+                color: 0xFCFCFC,
+                emissive: 0xD8D8D8,
+                //specular: 0xC90000,
+                metalness: 1.8,
                 roughness: 0.0,
               });
-            var cylGeometry = new THREE.CylinderGeometry( 0.5, 0.5, 1, 25, 50);
-            var cylGeometry2 = new THREE.CylinderGeometry( 0.5, 0.5, 1, 25, 50);
-            var cylGeometry3 = new THREE.CylinderGeometry( 0.5, 0.5, 1, 25, 50);
-            cylGeometry2.translate( 0, 2, 0 );
-            cylGeometry3.translate( 0, -2, 0 );
-            var cylinder2 = new THREE.Mesh( cylGeometry2, material );
-            var cylinder3 = new THREE.Mesh( cylGeometry3, material );
+            var cylGeometry = new THREE.CylinderGeometry( 0.5, 0.5, 1, 20, 10);
             var renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
             var cylinder = new THREE.Mesh( cylGeometry, material );
 
+            var loader = new THREE.FontLoader();
+            loader.load( 'helvetiker_regular.typeface.json', function ( font ) {
+              var geometry = new THREE.TextGeometry( 'Hello three.js!', {
+                font: font,
+                size: 0.2,
+                height: 0.05,
+                curveSegments: 20,
+                bevelEnabled: false,
+                bevelThickness: 0.02,
+                bevelSize: 0.05,
+                bevelSegments: 3
+              } );
+              //geometry.center();
+              geometry.translate(-0.5,0.05,0.5,0);
+              //var material = new THREE.MeshNormalMaterial();
+              var mesh = new THREE.Mesh( geometry, material );
+                var group = new THREE.Group();
+                group.add( mesh );
+                group.add( cylinder );
+                scene.add( group );
+            } );
+
             const frontSpot = new THREE.SpotLight(0xeeeece);
-            frontSpot.position.set(1000, 1000, 1000);
+            frontSpot.position.set(1000, 2000, 1000);
             scene.add(frontSpot);
 
             renderer.setSize( window.innerWidth, window.innerHeight );
             document.body.appendChild( renderer.domElement );
-            scene.add( cylinder2 );
-            scene.add( cylinder3 );
-            scene.add( cylinder );
-            camera.position.z = 5;
+
+            //scene.add( cylinder );
+            camera.position.z = 2;
+            var controls = new THREE.OrbitControls( camera, renderer.domElement );
+
+
+            //
+
+
 
             function animate() {
                 requestAnimationFrame( animate );
                 renderer.render( scene, camera );
    
                 cylinder.rotation.z = Math.PI / 2;
-                cylinder.rotation.x += 0.035;
-
-                cylinder2.rotation.z = Math.PI / 2;
-                cylinder2.rotation.x += 0.035;
-
-                cylinder3.rotation.z = Math.PI / 2;
-                cylinder3.rotation.x += 0.035;
+                cylinder.rotation.x += 0.017;
                 //cylinder.rotation.set(new THREE.Vector3( 0, 0, Math.PI / 2));
             }
             animate();
