@@ -23,30 +23,70 @@
                 metalness: 1.8,
                 roughness: 0.0,
               });
-            var cylGeometry = new THREE.CylinderGeometry( 0.5, 0.5, 1, 20, 10);
+            var cylGeometry = new THREE.CylinderGeometry( 0.5, 0.5, 1, 50, 10);
             var renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
             var cylinder = new THREE.Mesh( cylGeometry, material );
 
             var loader = new THREE.FontLoader();
+            var mesh = new THREE.Mesh();
+            var mesh2 = new THREE.Mesh();
+            var textGeometry;
             loader.load( 'helvetiker_regular.typeface.json', function ( font ) {
-              var geometry = new THREE.TextGeometry( 'Hello three.js!', {
+              var textGeometry = new THREE.TextGeometry( 'Rizograma', {
                 font: font,
-                size: 0.2,
-                height: 0.05,
-                curveSegments: 20,
+                size: 0.1,
+                height: 0.04,
+                curveSegments: 5,
                 bevelEnabled: false,
                 bevelThickness: 0.02,
                 bevelSize: 0.05,
                 bevelSegments: 3
               } );
-              //geometry.center();
-              geometry.translate(-0.5,0.05,0.5,0);
+              var textGeometry2 = new THREE.TextGeometry( 'Artículos', {
+                font: font,
+                size: 0.1,
+                height: 0.04,
+                curveSegments: 5,
+                bevelEnabled: false,
+                bevelThickness: 0.02,
+                bevelSize: 0.05,
+                bevelSegments: 3
+              } );
+              //textGeometry.translate(0,0.01,0.7,0);
               //var material = new THREE.MeshNormalMaterial();
-              var mesh = new THREE.Mesh( geometry, material );
+                var mesh = new THREE.Mesh( textGeometry, material );
+                var mesh2 = new THREE.Mesh( textGeometry2, material );
                 var group = new THREE.Group();
-                group.add( mesh );
+                //group.add( mesh );
+                //group.add( cylinder );
+                //scene.add( group );
+
+                pivot = new THREE.Object3D();
+                pivot.add( mesh );
+                pivot2 = new THREE.Object3D();
+                pivot2.add( mesh2 );
+                group.add( pivot );
+                group.add( pivot2 );
                 group.add( cylinder );
                 scene.add( group );
+                //scene.add( pivot );
+
+                //hacer que el texto baje
+
+                var x = 0.01;
+                textGeometry.center();
+                textGeometry2.center();
+                textGeometry.translate(0,0.09,0.5,0);
+                textGeometry2.translate(0,-0.09,0.5,0);
+                //loopear esto a la misma velocidad del rotation
+                //esto repite infinitamente
+                //horizontal, vertical, height, 0
+                //var intervalo = setInterval(function(){ textGeometry.translate(0,-0.0012,-0.00079,0);}, 7);
+                //var intervalo2 = setInterval(function(){ textGeometry.translate(0,0,-0.00079,0);}, 15);
+                //setInterval(function(){clearInterval(intervalo);clearInterval(intervalo2);}, 2900);
+                // setInterval(function(){clearInterval(intervalo2)}, 2000);
+                //esto repite cada cierto tiempo
+                
             } );
 
             const frontSpot = new THREE.SpotLight(0xeeeece);
@@ -61,16 +101,14 @@
             var controls = new THREE.OrbitControls( camera, renderer.domElement );
 
 
-            //
-
-
-
             function animate() {
                 requestAnimationFrame( animate );
                 renderer.render( scene, camera );
    
                 cylinder.rotation.z = Math.PI / 2;
                 cylinder.rotation.x += 0.017;
+                pivot.rotation.x += 0.02;
+                pivot2.rotation.x += 0.02;
                 //cylinder.rotation.set(new THREE.Vector3( 0, 0, Math.PI / 2));
             }
             animate();
